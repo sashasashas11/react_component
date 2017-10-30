@@ -21,7 +21,7 @@ class VehicleComponent extends Component {
 
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
-    this.filters = props.filter
+    this.filters = props.filter;
   }
 
   openModal() {
@@ -43,7 +43,8 @@ class VehicleComponent extends Component {
   }
 
   applyFilters(filters) {
-    var dataFilter = new DataFilter(this.state.types, this.state.models, filters);
+    var ids = new SearchFilter(this.state.types, filters, 'byIds').getIds();
+    var dataFilter = new DataFilter(this.state.types, this.state.models, ids);
     return dataFilter.apply();
   }
 

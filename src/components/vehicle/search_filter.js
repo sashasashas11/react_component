@@ -1,7 +1,8 @@
 export default class SearchFilter {
-  constructor(vehicleTypes, keyword) {
+  constructor(vehicleTypes, keyword, method) {
     this.vehicleTypes = vehicleTypes;
     this.keyword = keyword;
+    this.method = method;
     this.ids = {vehicleTypeId: [], vehicleModelId: [], vehicleId: []};
   }
 
@@ -46,6 +47,20 @@ export default class SearchFilter {
   }
 
   checkCondition(entity) {
+    if (this.method == 'byIds')
+      return this.checkConditionByIds(entity)
+
     return (entity.name.search(this.keyword.trim()) != -1)
+  }
+
+  checkConditionByIds(entity) {
+    var filter = this.keyword;
+    if (!filter)
+      return true;
+
+    if (!filter[entity.type] || filter[entity.type].length == 0)
+      return false;
+
+    return (filter[entity.type].indexOf(entity.id) > -1)
   }
 }

@@ -10,7 +10,8 @@ export default class VehiclesService {
       var models = this.getModels();
       var types = this.getTypes();
       return Promise.all([vehicles, models, types]).then(data => {
-        return { vehicles: data[0], models: data[1], types: data[2] }
+        var types = this.prepareTypesData(data[2], data[1]);
+        return { vehicles: data[0], models: data[1], types: this.addEntityTypes(types) }
       });
     }
 
@@ -24,5 +25,25 @@ export default class VehiclesService {
 
     getTypes() {
         return fetch(this.vehicleTypesUrl).then(res=>res.json())
+    }
+
+    prepareTypesData(types, models) {
+      types.forEach(t => {
+        t.models = models.filter(m => {
+          return m.vehicleType.id == t.id
+        })
+      });
+      return types
+    }
+
+    addEntityTypes(vehicleTypes) {
+      vehicleTypes.forEach(t=>{
+        t.type = 'vehicleTypeId';
+        t.models.forEach(m=>{
+          m.type = 'vehicleModelId';
+          m.vehicles.forEach(v=>{ v.type = 'vehicleId' })
+        })
+      });
+      return vehicleTypes
     }
 }

@@ -7,12 +7,13 @@ class App extends Component {
   constructor() {
       super();
       this.firstFilter = { vehicleTypeId: [1,2,4,5], vehicleModelId: [1,8,3], vehicleId: [1,6,3] };
+      this.secondFilter = { vehicleModelId: [5] };
   }
   render() {
     return (
       <div className="App">
           <VehicleComponent filter={this.firstFilter}/>
-          <VehicleComponent />
+          <VehicleComponent filter={this.secondFilter}/>
           <VehicleComponent />
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
