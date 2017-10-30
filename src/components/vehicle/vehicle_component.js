@@ -25,6 +25,7 @@ class VehicleComponent extends Component {
   }
 
   openModal() {
+    this.initTypesList();
     this.setState({modalIsOpen: true});
   }
 
@@ -37,7 +38,7 @@ class VehicleComponent extends Component {
       this.setState({vehicles: data.vehicles});
       this.setState({models: data.models});
       this.setState({types: data.types});
-      this.setState({typesList: this.applyFilters(this.filters)});
+      this.initTypesList();
     });
   }
 
@@ -46,10 +47,14 @@ class VehicleComponent extends Component {
     return dataFilter.apply();
   }
 
+  initTypesList() {
+    this.setState({typesList: this.applyFilters(this.filters)});
+  }
+
   search(event) {
     var types = this.applyFilters(this.filters);
     if (!event.target.value.length) {
-      return this.setState({typesList: types});
+      return this.initTypesList();
     }
     var ids = new SearchFilter(types, event.target.value).getIds();
     var data = this.applyFilters(ids);
